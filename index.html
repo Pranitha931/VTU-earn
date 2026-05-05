@@ -1,0 +1,1633 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VTU AI Learning Platform</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            slate: {
+              900: '#0F172A',
+              800: '#1E293B',
+              700: '#334155',
+              400: '#94A3B8',
+              200: '#E2E8F0',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #0F172A;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #475569;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-slide-in {
+      animation: slideIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) both;
+    }
+
+    /* Custom Scrollbar for horizontal scroll */
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      /* IE and Edge */
+      scrollbar-width: none;
+      /* Firefox */
+    }
+
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    .typing-dot {
+      animation: typing 1.4s infinite ease-in-out both;
+    }
+
+    .typing-dot:nth-child(1) {
+      animation-delay: -0.32s;
+    }
+
+    .typing-dot:nth-child(2) {
+      animation-delay: -0.16s;
+    }
+
+    @keyframes typing {
+
+      0%,
+      80%,
+      100% {
+        transform: scale(0);
+        opacity: 0.5;
+      }
+
+      40% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-fade-in {
+      animation: fadeIn 0.5s ease-out both;
+    }
+
+    @keyframes pulse-glow {
+
+      0%,
+      100% {
+        box-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
+      }
+
+      50% {
+        box-shadow: 0 0 25px rgba(6, 182, 212, 0.8);
+      }
+    }
+
+    .glow-pulse {
+      animation: pulse-glow 2s infinite;
+    }
+
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-fade-in {
+      animation: fadeIn 0.5s ease-out both;
+    }
+
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-fade-in {
+      animation: fadeIn 0.5s ease-out both;
+    }
+
+    /* Custom CSS Checkbox */
+    .checkbox-custom {
+      appearance: none;
+      background-color: rgba(15, 23, 42, 0.8);
+      margin: 0;
+      font: inherit;
+      color: currentColor;
+      width: 1.3em;
+      height: 1.3em;
+      border: 2px solid #334155;
+      border-radius: 0.35em;
+      display: grid;
+      place-content: center;
+      transition: all 0.2s ease-in-out;
+      cursor: pointer;
+    }
+
+    .checkbox-custom::before {
+      content: "";
+      width: 0.75em;
+      height: 0.75em;
+      transform: scale(0);
+      transition: 120ms transform ease-in-out;
+      box-shadow: inset 1em 1em white;
+      background-color: transparent;
+      transform-origin: center;
+      clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+    }
+
+    .checkbox-custom:checked {
+      background-color: #10b981;
+      border-color: #10b981;
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+    }
+
+    .checkbox-custom:checked::before {
+      transform: scale(1);
+    }
+
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-fade-in {
+      animation: fadeIn 0.5s ease-out both;
+    }
+
+    @keyframes pulse-glow-gold {
+
+      0%,
+      100% {
+        box-shadow: 0 0 15px rgba(250, 204, 21, 0.4);
+      }
+
+      50% {
+        box-shadow: 0 0 30px rgba(250, 204, 21, 0.8);
+      }
+    }
+
+    .glow-gold {
+      animation: pulse-glow-gold 3s infinite;
+    }
+
+    .podium-1 {
+      border-top-color: #FBBF24;
+      box-shadow: 0 -10px 30px rgba(251, 191, 36, 0.2);
+    }
+
+    .podium-2 {
+      border-top-color: #94A3B8;
+      box-shadow: 0 -5px 20px rgba(148, 163, 184, 0.2);
+    }
+
+    .podium-3 {
+      border-top-color: #B45309;
+      box-shadow: 0 -5px 20px rgba(180, 83, 9, 0.2);
+    }
+  </style>
+</head>
+
+<body class="bg-slate-900 text-white overflow-hidden">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
+
+
+    const DashboardUI = ({ setActiveTab }) => {
+      const [isGenerating, setIsGenerating] = useState(false);
+
+      const handleGenerate = () => {
+        setIsGenerating(true);
+        setTimeout(() => setIsGenerating(false), 1500);
+      };
+
+      const tabs = [
+        { name: 'Dashboard', icon: '📊' },
+        { name: 'Notes', icon: '📚' },
+        { name: 'AI Learning', icon: '🤖' },
+        { name: 'Test', icon: '📝' },
+        { name: 'Error Tracker', icon: '🎯' },
+        { name: 'Study Planner', icon: '📅' },
+        { name: 'Leaderboard', icon: '🏆' }
+      ];
+
+      return (
+        <div className="max-w-6xl mx-auto space-y-8 animate-slide-in">
+          <div className="flex items-end justify-between">
+            <div>
+              <h2 className="text-3xl font-bold tracking-tight text-white mb-2">Dashboard</h2>
+              <p className="text-slate-400">Welcome back! Here's your personalized overview.</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {tabs.slice(1).map((tab, i) => (
+              <div
+                key={tab.name}
+                onClick={() => setActiveTab(tab.name)}
+                className="group bg-slate-800/40 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-6 transition-all duration-300 transform hover:scale-105 hover:bg-slate-800/60 hover:shadow-[0_0_25px_rgba(6,182,212,0.15)] cursor-pointer relative overflow-hidden"
+              >
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-slate-600 group-hover:via-cyan-400 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+                <div className="flex items-center justify-between mb-6">
+                  <div className={`h-12 w-12 rounded-xl flex items-center justify-center text-2xl shadow-inner ${i % 3 === 0 ? 'bg-purple-500/10 text-purple-400 border border-purple-500/20' :
+                      i % 2 === 0 ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20' :
+                        'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                    }`}>
+                    {tab.icon}
+                  </div>
+                  <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-900/80 border border-slate-700 text-slate-300">
+                    {i === 0 ? 'Important' : i === 1 ? 'Weak' : 'Review'}
+                  </span>
+                </div>
+
+                <h3 className="text-xl font-semibold mb-2 group-hover:text-cyan-300 transition-colors">{tab.name}</h3>
+                <p className="text-slate-400 text-sm mb-6 line-clamp-2">
+                  Engage with this interactive module for the {tab.name.toLowerCase()} section. Focus on core concepts and practical implementation.
+                </p>
+
+                <div className="mt-auto">
+                  <div className="flex justify-between text-xs mb-1.5">
+                    <span className="text-slate-400">Activity Level</span>
+                    <span className="text-slate-300 font-medium">{Math.floor(Math.random() * 60 + 20)}%</span>
+                  </div>
+                  <div className="w-full bg-slate-900 rounded-full h-2 border border-slate-700/50 shadow-inner">
+                    <div className={`h-2 rounded-full transition-all duration-1000 ease-out ${i % 3 === 0 ? 'bg-gradient-to-r from-purple-500 to-purple-400 shadow-[0_0_10px_rgba(168,85,247,0.5)]' :
+                        i % 2 === 0 ? 'bg-gradient-to-r from-cyan-500 to-cyan-400 shadow-[0_0_10px_rgba(6,182,212,0.5)]' :
+                          'bg-gradient-to-r from-emerald-500 to-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.5)]'
+                      }`} style={{ width: `${Math.floor(Math.random() * 60 + 20)}%` }}></div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="w-full bg-slate-800/30 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-8 hover:border-slate-600/50 transition-colors">
+            <h3 className="text-xl font-semibold mb-4">Activity Overview</h3>
+            <div className="h-40 w-full flex items-end gap-2 justify-between px-4">
+              {[...Array(14)].map((_, j) => (
+                <div key={j} className="w-full bg-slate-800 rounded-t-md relative group hover:bg-slate-700 transition-colors" style={{ height: `${Math.max(20, Math.random() * 100)}%` }}>
+                  <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-900 text-xs px-2 py-1 rounded border border-slate-700 opacity-0 group-hover:opacity-100 transition-opacity">
+                    Data
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+
+    // --- From notes.html ---
+    const subjects = [
+      { id: 'dbms', name: 'DBMS', icon: '🗄️', progress: 75, status: 'In Progress', color: 'emerald' },
+      { id: 'os', name: 'Operating Systems', icon: '💻', progress: 40, status: 'Needs Review', color: 'cyan' },
+      { id: 'cn', name: 'Computer Networks', icon: '🌐', progress: 90, status: 'Almost Done', color: 'blue' },
+      { id: 'java', name: 'Java Programming', icon: '☕', progress: 100, status: 'Completed', color: 'emerald' },
+      { id: 'algo', name: 'Algorithms', icon: '🧠', progress: 20, status: 'Just Started', color: 'rose' }
+    ];
+
+    const topics = [
+      { id: 1, title: 'Introduction to Databases', duration: '15 mins', active: false },
+      { id: 2, title: 'ER Model and Diagrams', duration: '45 mins', active: true },
+      { id: 3, title: 'Relational Algebra', duration: '1 hr 20 mins', active: false },
+      { id: 4, title: 'SQL Queries', duration: '2 hrs', active: false },
+      { id: 5, title: 'Normalization (1NF to BCNF)', duration: '1 hr 30 mins', active: false },
+      { id: 6, title: 'Transactions and Concurrency', duration: '2 hrs', active: false }
+    ];
+
+    const ProgressBar = ({ progress, color }) => {
+      const colorMap = {
+        emerald: 'bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.8)]',
+        cyan: 'bg-cyan-500 shadow-[0_0_10px_rgba(6,182,212,0.8)]',
+        blue: 'bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.8)]',
+        rose: 'bg-rose-500 shadow-[0_0_10px_rgba(244,63,94,0.8)]',
+      };
+
+      return (
+        <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden mt-3 border border-white/5">
+          <div
+            className={`h-full rounded-full transition-all duration-1000 ${colorMap[color] || colorMap.emerald}`}
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+      );
+    };
+
+    const NotesUI = ({ setActiveTab }) => {
+      const [activeSubject, setActiveSubject] = useState('dbms');
+      const [activeTopic, setActiveTopic] = useState(2);
+
+      return (
+        <div className="max-w-7xl mx-auto flex flex-col h-[90vh]">
+          {/* Header Section */}
+          <div className="mb-6 flex justify-between items-end mt-4">
+            <div>
+              <h1 className="text-3xl font-bold text-white mb-2">My Notes</h1>
+              <p className="text-slate-400">Continue where you left off or explore new subjects.</p>
+            </div>
+            <button className="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-cyan-400 border border-cyan-500/30 hover:border-cyan-500/80 rounded-xl font-medium transition-all shadow-[0_0_15px_rgba(6,182,212,0.1)] hover:shadow-[0_0_20px_rgba(6,182,212,0.3)] flex items-center gap-2">
+              <span>✨</span> Generate Summary
+            </button>
+          </div>
+
+          {/* Horizontal Scrollable Subject Cards */}
+          <div className="flex space-x-4 overflow-x-auto pb-4 mb-6 hide-scrollbar">
+            {subjects.map(subject => {
+              const isActive = activeSubject === subject.id;
+              return (
+                <div
+                  key={subject.id}
+                  onClick={() => setActiveSubject(subject.id)}
+                  className={`
+                    min-w-[280px] p-5 rounded-2xl cursor-pointer transition-all duration-300 transform hover:-translate-y-1 hover:scale-[1.02]
+                    ${isActive
+                      ? 'bg-slate-800/80 border border-cyan-500/50 shadow-[0_0_20px_rgba(6,182,212,0.2)]'
+                      : 'bg-slate-900/40 border border-white/5 hover:border-white/20 hover:bg-slate-800/50'
+                    }
+                    backdrop-blur-md
+                  `}
+                >
+                  <div className="flex justify-between items-start mb-3">
+                    <div className="flex items-center gap-3">
+                      <span className="text-2xl">{subject.icon}</span>
+                      <h3 className={`font-semibold ${isActive ? 'text-white' : 'text-slate-300'}`}>{subject.name}</h3>
+                    </div>
+                    <span className="text-xs font-medium px-2 py-1 rounded bg-slate-950/50 text-slate-400 border border-slate-700/50">
+                      {subject.status}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-end text-sm mt-4">
+                    <span className="text-slate-400">Progress</span>
+                    <span className={`font-medium ${isActive ? 'text-cyan-400' : 'text-slate-300'}`}>{subject.progress}%</span>
+                  </div>
+                  <ProgressBar progress={subject.progress} color={isActive ? 'cyan' : subject.color} />
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Main Content Area: Left Panel (Topics) + Right Panel (Notes Viewer) */}
+          <div className="flex-1 flex gap-6 overflow-hidden">
+
+            {/* Left Panel: Topic List */}
+            <div className="w-1/3 flex flex-col bg-slate-900/40 backdrop-blur-md border border-white/10 rounded-2xl overflow-hidden shadow-[0_8px_32px_0_rgba(31,38,135,0.37)]">
+              <div className="p-5 border-b border-white/10 bg-slate-800/30">
+                <h3 className="text-lg font-semibold text-white">Topics List</h3>
+                <div className="relative mt-3">
+                  <input
+                    type="text"
+                    placeholder="Search topics..."
+                    className="w-full bg-slate-950/50 border border-slate-700/50 text-slate-300 text-sm rounded-lg pl-9 pr-3 py-2 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50"
+                  />
+                  <span className="absolute left-3 top-2.5 text-slate-500 text-sm">🔍</span>
+                </div>
+              </div>
+
+              <div className="flex-1 overflow-y-auto p-3 space-y-1">
+                {topics.map(topic => {
+                  const isActive = activeTopic === topic.id;
+                  return (
+                    <div
+                      key={topic.id}
+                      onClick={() => setActiveTopic(topic.id)}
+                      className={`
+                        p-3 rounded-xl cursor-pointer transition-all duration-200 flex flex-col gap-1
+                        ${isActive
+                          ? 'bg-gradient-to-r from-emerald-500/20 to-transparent border-l-4 border-emerald-500 text-white'
+                          : 'hover:bg-slate-800/50 text-slate-400 hover:text-slate-200'
+                        }
+                      `}
+                    >
+                      <span className="font-medium">{topic.title}</span>
+                      <span className="text-xs opacity-60 flex items-center gap-1">
+                        ⏱️ {topic.duration}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Right Panel: Notes Viewer */}
+            <div className="flex-1 flex flex-col bg-slate-900/40 backdrop-blur-md border border-white/10 rounded-2xl overflow-hidden relative group shadow-[0_8px_32px_0_rgba(31,38,135,0.37)]">
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-500 to-cyan-500 opacity-50"></div>
+
+              <div className="p-6 border-b border-white/10 flex justify-between items-center bg-slate-800/30">
+                <div>
+                  <div className="flex items-center gap-2 text-sm text-emerald-400 mb-1 font-medium">
+                    <span>DBMS</span>
+                    <span>/</span>
+                    <span>Chapter 2</span>
+                  </div>
+                  <h2 className="text-2xl font-bold text-white">ER Model and Diagrams</h2>
+                </div>
+                <div className="flex gap-2">
+                  <button className="p-2 bg-slate-800 hover:bg-slate-700 border border-slate-700/50 hover:border-slate-600 rounded-lg text-slate-300 transition-all tooltip" title="Bookmark">
+                    🔖
+                  </button>
+                  <button className="p-2 bg-slate-800 hover:bg-slate-700 border border-slate-700/50 hover:border-slate-600 rounded-lg text-slate-300 transition-all tooltip" title="Download PDF">
+                    📥
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex-1 p-8 overflow-y-auto text-slate-300 leading-relaxed space-y-6">
+                <p className="text-lg text-slate-200 font-medium">
+                  The Entity-Relationship (ER) model is a high-level conceptual data model useful in developing a conceptual design for databases.
+                </p>
+
+                <div className="bg-slate-950/50 border border-slate-800 p-5 rounded-xl my-6">
+                  <h4 className="text-white font-semibold mb-3 flex items-center gap-2">
+                    <span className="text-emerald-400">💡</span> Key Concepts
+                  </h4>
+                  <ul className="list-disc pl-5 space-y-2 text-sm text-slate-400">
+                    <li><strong className="text-slate-300">Entity:</strong> An object in the real world that is distinguishable from other objects.</li>
+                    <li><strong className="text-slate-300">Attribute:</strong> Properties that describe an entity.</li>
+                    <li><strong className="text-slate-300">Relationship:</strong> An association among several entities.</li>
+                  </ul>
+                </div>
+
+                <p>
+                  <strong>Entity Sets:</strong> A collection of entities of the same type that share the same properties or attributes. For example, a set of all persons who are customers at a given bank can be defined as the customer entity set.
+                </p>
+
+                <div className="w-full h-48 bg-slate-800/50 border border-slate-700 rounded-xl flex items-center justify-center text-slate-500 my-6 border-dashed hover:border-slate-500 transition-colors cursor-pointer">
+                  [ER Diagram Illustration Placeholder]
+                </div>
+
+                <p>
+                  <strong>Mapping Cardinalities:</strong> Express the number of entities to which another entity can be associated via a relationship set. They are most useful in describing binary relationship sets.
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      );
+    };
+
+    // --- From ai-chat.html ---
+    const chatHistory = [
+      { id: 1, title: 'Explain Relational Algebra', date: 'Today' },
+      { id: 2, title: 'Dijkstra Algorithm Help', date: 'Yesterday' },
+      { id: 3, title: 'React Hooks vs Classes', date: '2 days ago' },
+      { id: 4, title: 'Normalization Normal Forms', date: 'Last week' },
+    ];
+
+    const initialMessages = [
+      { id: 1, sender: 'ai', text: 'Hello! I am your AI learning assistant. What would you like to study today?' }
+    ];
+
+    const modes = ['Simple', 'Exam', 'Step-by-step'];
+
+    const ChatUI = ({ setActiveTab }) => {
+      const [messages, setMessages] = useState(initialMessages);
+      const [inputValue, setInputValue] = useState('');
+      const [isTyping, setIsTyping] = useState(false);
+      const [selectedMode, setSelectedMode] = useState('Step-by-step');
+      const messagesEndRef = useRef(null);
+
+      const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+      };
+
+      useEffect(() => {
+        scrollToBottom();
+      }, [messages, isTyping]);
+
+      const handleSend = () => {
+        if (!inputValue.trim()) return;
+
+        const newMsg = { id: Date.now(), sender: 'user', text: inputValue };
+        setMessages(prev => [...prev, newMsg]);
+        setInputValue('');
+        setIsTyping(true);
+
+        setTimeout(() => {
+          setIsTyping(false);
+          setMessages(prev => [
+            ...prev,
+            { id: Date.now(), sender: 'ai', text: `Here is a ${selectedMode.toLowerCase()} explanation for what you asked. This represents a generated response to help you understand the concept better...` }
+          ]);
+        }, 2000);
+      };
+
+      return (
+        <div className="max-w-7xl mx-auto flex h-[90vh] gap-6">
+
+          {/* Left Sidebar: Chat History */}
+          <div className="w-1/4 bg-slate-900/40 backdrop-blur-md border border-white/10 rounded-2xl flex flex-col overflow-hidden shadow-[0_8px_32px_0_rgba(31,38,135,0.37)]">
+            <div className="p-5 border-b border-white/10 bg-slate-800/30 flex justify-between items-center">
+              <h2 className="text-xl font-bold text-white">Chat History</h2>
+              <button className="text-cyan-400 hover:text-cyan-300 bg-cyan-500/10 hover:bg-cyan-500/20 p-2 rounded-lg transition-colors tooltip" title="New Chat">
+                ➕
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto p-4 space-y-2 hide-scrollbar">
+              {chatHistory.map(chat => (
+                <div key={chat.id} className="p-3 bg-slate-800/30 hover:bg-slate-700/50 rounded-xl cursor-pointer transition-colors border border-transparent hover:border-slate-600/50 group">
+                  <h4 className="text-sm font-medium text-slate-200 group-hover:text-white truncate">{chat.title}</h4>
+                  <p className="text-xs text-slate-500 mt-1">{chat.date}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Right Area: Chat Window */}
+          <div className="flex-1 bg-slate-900/40 backdrop-blur-md border border-white/10 rounded-2xl flex flex-col overflow-hidden shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] relative">
+
+            {/* Top Bar with Mode Selector */}
+            <div className="p-4 border-b border-white/10 bg-slate-800/30 flex justify-between items-center z-10">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-400 to-cyan-500 flex items-center justify-center text-white text-lg font-bold shadow-[0_0_15px_rgba(6,182,212,0.5)]">
+                  AI
+                </div>
+                <div>
+                  <h3 className="text-white font-semibold">Tutor AI</h3>
+                  <p className="text-xs text-emerald-400 flex items-center gap-1">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Online
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex bg-slate-950/50 p-1 rounded-lg border border-slate-700/50">
+                {modes.map(mode => (
+                  <button
+                    key={mode}
+                    onClick={() => setSelectedMode(mode)}
+                    className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all ${selectedMode === mode
+                        ? 'bg-slate-700 text-white shadow-md'
+                        : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
+                      }`}
+                  >
+                    {mode}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Chat Area */}
+            <div className="flex-1 p-6 overflow-y-auto space-y-6 hide-scrollbar">
+              {messages.map((msg, index) => (
+                <div
+                  key={msg.id}
+                  className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'} animate-[fadeIn_0.3s_ease-out]`}
+                  style={{ animationFillMode: 'both' }}
+                >
+                  <div
+                    className={`max-w-[70%] p-4 rounded-2xl ${msg.sender === 'user'
+                        ? 'bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 border border-emerald-500/30 text-white rounded-br-sm'
+                        : 'bg-slate-800/60 border border-slate-700 text-slate-200 rounded-bl-sm shadow-inner'
+                      }`}
+                  >
+                    <p className="leading-relaxed text-sm md:text-base">{msg.text}</p>
+                  </div>
+                </div>
+              ))}
+
+              {isTyping && (
+                <div className="flex justify-start animate-[fadeIn_0.3s_ease-out]">
+                  <div className="p-4 rounded-2xl bg-slate-800/60 border border-slate-700 rounded-bl-sm flex gap-1.5 items-center h-12">
+                    <div className="w-2 h-2 bg-emerald-400 rounded-full typing-dot"></div>
+                    <div className="w-2 h-2 bg-emerald-400 rounded-full typing-dot"></div>
+                    <div className="w-2 h-2 bg-emerald-400 rounded-full typing-dot"></div>
+                  </div>
+                </div>
+              )}
+              <div ref={messagesEndRef} />
+            </div>
+
+            {/* Input Area */}
+            <div className="p-4 bg-slate-900/80 border-t border-white/10 backdrop-blur-lg">
+              <div className="flex items-center gap-3">
+                <input
+                  type="text"
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && handleSend()}
+                  placeholder={`Ask anything in ${selectedMode} mode...`}
+                  className="flex-1 bg-slate-800/50 border border-slate-700 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-all placeholder:text-slate-500"
+                />
+                <button
+                  onClick={handleSend}
+                  className="p-3 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-white hover:shadow-[0_0_15px_rgba(16,185,129,0.5)] transition-all transform hover:scale-105 active:scale-95 flex items-center justify-center"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 transform rotate-90" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      );
+    };
+
+    // --- From test.html ---
+    const dummyQuestions = [
+      { id: 1, text: "Explain the differences between Relational Algebra and Relational Calculus.", expected: "Relational algebra is procedural (how to get data) while relational calculus is declarative (what data to get)." },
+      { id: 2, text: "Write an SQL query to find the second highest salary from an Employee table.", expected: "SELECT MAX(Salary) FROM Employee WHERE Salary < (SELECT MAX(Salary) FROM Employee)" },
+      { id: 3, text: "What is BCNF? How does it differ from 3NF?", expected: "BCNF is a stricter version of 3NF where every determinant must be a candidate key." },
+      { id: 4, text: "Describe the ACID properties in database transactions.", expected: "Atomicity, Consistency, Isolation, Durability." },
+      { id: 5, text: "What is a deadlock and how can it be prevented?", expected: "A situation where processes block each other. Prevention involves ordered resource allocation." },
+    ];
+
+    const TestUI = ({ setActiveTab }) => {
+      const [currentQIndex, setCurrentQIndex] = useState(0);
+      const [answers, setAnswers] = useState({});
+      const [timeLeft, setTimeLeft] = useState(3600); // 1 hour in seconds
+      const [isSubmitted, setIsSubmitted] = useState(false);
+      const [isSubmitting, setIsSubmitting] = useState(false);
+
+      useEffect(() => {
+        if (timeLeft > 0 && !isSubmitted && !isSubmitting) {
+          const timerId = setInterval(() => setTimeLeft(prev => prev - 1), 1000);
+          return () => clearInterval(timerId);
+        }
+      }, [timeLeft, isSubmitted, isSubmitting]);
+
+      const formatTime = (seconds) => {
+        const m = Math.floor(seconds / 60);
+        const s = seconds % 60;
+        return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+      };
+
+      const handleAnswerChange = (e) => {
+        setAnswers({ ...answers, [currentQIndex]: e.target.value });
+      };
+
+      const handleSubmission = () => {
+        setIsSubmitting(true);
+        setTimeout(() => {
+          setIsSubmitting(false);
+          setIsSubmitted(true);
+        }, 2500); // Wait for 2.5s for loading animation
+      };
+
+      if (isSubmitting) {
+        return (
+          <div className="flex flex-col items-center justify-center min-h-[80vh] animate-fade-in">
+            <div className="w-16 h-16 border-4 border-slate-700 border-t-cyan-400 rounded-full animate-spin glow-pulse mb-6"></div>
+            <h2 className="text-2xl font-bold text-white">Analyzing Your Answers...</h2>
+            <p className="text-slate-400 mt-2">AI is evaluating your responses against expected concepts.</p>
+          </div>
+        );
+      }
+
+      if (isSubmitted) {
+        // Dummy evaluation values
+        const score = 85;
+        return (
+          <div className="max-w-6xl mx-auto animate-fade-in pb-10">
+            <div className="text-center mb-10">
+              <h1 className="text-4xl font-bold text-white mb-4">Test Results</h1>
+              <div className="inline-block p-8 rounded-3xl bg-slate-900/50 border border-white/10 shadow-[0_0_30px_rgba(16,185,129,0.2)] backdrop-blur-sm">
+                <div className="text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-500 mb-2">
+                  {score}%
+                </div>
+                <div className="text-slate-400 font-medium tracking-wide">EXCELLENT PERFORMANCE</div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+              <div className="p-6 rounded-2xl bg-slate-900/40 border border-emerald-500/30 shadow-lg">
+                <h3 className="text-emerald-400 font-semibold mb-2 flex items-center gap-2"><span>📈</span> Strengths</h3>
+                <p className="text-sm text-slate-300 leading-relaxed">Strong conceptual understanding of normal forms and SQL syntax. Great detail provided in queries.</p>
+              </div>
+              <div className="p-6 rounded-2xl bg-slate-900/40 border border-rose-500/30 shadow-lg">
+                <h3 className="text-rose-400 font-semibold mb-2 flex items-center gap-2"><span>🎯</span> Needs Work</h3>
+                <p className="text-sm text-slate-300 leading-relaxed">Transaction concurrency concepts could be more detailed, particularly regarding deadlock prevention protocols.</p>
+              </div>
+              <div className="p-6 rounded-2xl bg-slate-900/40 border border-cyan-500/30 shadow-lg">
+                <h3 className="text-cyan-400 font-semibold mb-2 flex items-center gap-2"><span>🤖</span> AI Recommendation</h3>
+                <p className="text-sm text-slate-300 leading-relaxed">Review Chapter 5: Concurrency Control. Practice drawing wait-for graphs before the next module.</p>
+              </div>
+            </div>
+
+            <h3 className="text-xl font-bold text-white mb-6">Answer Comparison</h3>
+            <div className="space-y-6">
+              {dummyQuestions.map((q, i) => (
+                <div key={q.id} className="p-6 rounded-2xl bg-slate-900/40 border border-white/10 shadow-md">
+                  <h4 className="font-medium text-white mb-4 text-lg">Q{i + 1}: {q.text}</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="p-5 rounded-xl bg-slate-950/50 border border-slate-700/50">
+                      <div className="text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wider">Your Answer</div>
+                      <p className="text-sm text-slate-300 leading-relaxed whitespace-pre-wrap">{answers[i] || "No answer provided."}</p>
+                    </div>
+                    <div className="p-5 rounded-xl bg-emerald-950/20 border border-emerald-500/20">
+                      <div className="text-xs font-semibold text-emerald-500/70 mb-2 uppercase tracking-wider">Expected Concepts</div>
+                      <p className="text-sm text-emerald-100/80 leading-relaxed">{q.expected}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-10 text-center">
+              <button
+                onClick={() => setActiveTab('Dashboard')}
+                className="px-8 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-medium transition-colors border border-white/10 shadow-lg"
+              >
+                Return to Dashboard
+              </button>
+            </div>
+          </div>
+        );
+      }
+
+      return (
+        <div className="max-w-7xl mx-auto flex h-[90vh] gap-6 animate-fade-in">
+          {/* Sidebar: Navigation */}
+          <div className="w-64 flex flex-col gap-4">
+            <div className="p-6 rounded-2xl bg-slate-900/40 border border-white/10 backdrop-blur-md text-center shadow-[0_8px_32px_0_rgba(31,38,135,0.37)]">
+              <div className="text-slate-400 text-sm mb-2 font-medium">Time Remaining</div>
+              <div className={`text-4xl font-mono font-bold tracking-wider ${timeLeft < 300 ? 'text-rose-500 animate-pulse drop-shadow-[0_0_8px_rgba(244,63,94,0.8)]' : 'text-cyan-400 drop-shadow-[0_0_8px_rgba(6,182,212,0.5)]'}`}>
+                {formatTime(timeLeft)}
+              </div>
+            </div>
+
+            <div className="flex-1 p-5 rounded-2xl bg-slate-900/40 border border-white/10 backdrop-blur-md flex flex-col shadow-[0_8px_32px_0_rgba(31,38,135,0.37)]">
+              <h3 className="font-semibold text-white mb-4 flex justify-between items-center">
+                <span>Questions</span>
+                <span className="text-xs font-normal text-slate-400">{Object.keys(answers).filter(k => answers[k].trim()).length}/{dummyQuestions.length}</span>
+              </h3>
+              <div className="grid grid-cols-3 gap-2 flex-1 content-start">
+                {dummyQuestions.map((q, index) => {
+                  const isAnswered = !!answers[index]?.trim();
+                  const isActive = currentQIndex === index;
+                  return (
+                    <button
+                      key={q.id}
+                      onClick={() => setCurrentQIndex(index)}
+                      className={`
+                        py-3 rounded-xl font-medium transition-all duration-300
+                        ${isActive
+                          ? 'bg-cyan-500/20 border-cyan-500 text-cyan-300 border shadow-[0_0_15px_rgba(6,182,212,0.3)]'
+                          : isAnswered
+                            ? 'bg-slate-800 border-emerald-500/50 text-emerald-400 border'
+                            : 'bg-slate-800/50 border-transparent text-slate-400 hover:bg-slate-700 hover:text-slate-300 border'
+                        }
+                      `}
+                    >
+                      {index + 1}
+                    </button>
+                  );
+                })}
+              </div>
+              <button
+                onClick={handleSubmission}
+                className="w-full mt-4 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-semibold shadow-[0_0_15px_rgba(16,185,129,0.4)] hover:shadow-[0_0_25px_rgba(16,185,129,0.6)] transition-all transform hover:scale-[1.02] active:scale-[0.98]"
+              >
+                Submit Test
+              </button>
+            </div>
+          </div>
+
+          {/* Main Area: Question & Answer */}
+          <div className="flex-1 flex flex-col bg-slate-900/40 border border-white/10 rounded-2xl backdrop-blur-md overflow-hidden shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] relative">
+            <div className="absolute top-0 left-0 w-full h-1 bg-slate-800">
+              <div
+                className="h-full bg-gradient-to-r from-emerald-400 to-cyan-500 transition-all duration-300"
+                style={{ width: `${((currentQIndex + 1) / dummyQuestions.length) * 100}%` }}
+              ></div>
+            </div>
+
+            <div className="p-8 flex-1 flex flex-col">
+              <div className="mb-8">
+                <span className="text-cyan-400 font-semibold uppercase tracking-wider text-sm mb-2 block">
+                  Question {currentQIndex + 1} of {dummyQuestions.length}
+                </span>
+                <h2 className="text-2xl font-bold text-white leading-relaxed">
+                  {dummyQuestions[currentQIndex].text}
+                </h2>
+              </div>
+
+              <div className="flex-1 flex flex-col">
+                <div className="flex justify-between items-center mb-3">
+                  <label className="text-sm font-medium text-slate-400">Your Answer</label>
+                  <button className="text-sm text-slate-400 hover:text-white flex items-center gap-2 transition-colors tooltip bg-slate-800/50 hover:bg-slate-700/50 px-4 py-2 rounded-lg border border-slate-700/50">
+                    <span className="text-lg">📎</span> Upload Diagram/File
+                  </button>
+                </div>
+                <textarea
+                  value={answers[currentQIndex] || ''}
+                  onChange={handleAnswerChange}
+                  placeholder="Type your detailed answer here..."
+                  className="flex-1 w-full bg-slate-950/50 border border-slate-700 rounded-xl p-5 text-slate-200 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 resize-none transition-colors text-base leading-relaxed shadow-inner"
+                ></textarea>
+              </div>
+
+              <div className="flex justify-between mt-6 pt-6 border-t border-slate-800">
+                <button
+                  onClick={() => setCurrentQIndex(Math.max(0, currentQIndex - 1))}
+                  disabled={currentQIndex === 0}
+                  className="px-6 py-2.5 rounded-xl border border-slate-700 text-slate-300 hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+                >
+                  Previous
+                </button>
+                <button
+                  onClick={() => setCurrentQIndex(Math.max(0, Math.min(dummyQuestions.length - 1, currentQIndex + 1)))}
+                  disabled={currentQIndex === dummyQuestions.length - 1}
+                  className="px-6 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-md"
+                >
+                  Next Question
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      );
+    };
+
+    // --- From error-tracker.html ---
+    const ErrorTrackerUI = ({ setActiveTab }) => {
+      const [expandedError, setExpandedError] = useState(null);
+
+      // Dummy Data
+      const heatmapData = Array.from({ length: 90 }, (_, i) => Math.floor(Math.random() * 4));
+
+      const mistakes = [
+        { topic: "SQL Syntax", percent: 65, color: "bg-rose-500" },
+        { topic: "Concurrency Logic", percent: 45, color: "bg-orange-500" },
+        { topic: "Normalization", percent: 25, color: "bg-cyan-500" },
+        { topic: "React Hooks", percent: 15, color: "bg-emerald-500" },
+      ];
+
+      const errorList = [
+        { id: 1, title: "SyntaxError: Unexpected token in JSON", module: "Frontend", time: "2 hours ago", details: "You forgot a comma in your package.json on line 42.", fix: "Add a comma at the end of the line before the next key-value pair." },
+        { id: 2, title: "LogicError: Deadlock detected in transaction", module: "Database", time: "1 day ago", details: "Transaction A and B are waiting on each other's resources.", fix: "Implement a timeout or ordered resource allocation protocol." },
+        { id: 3, title: "TypeError: Cannot read properties of undefined", module: "React Component", time: "3 days ago", details: "Attempted to access user.profile.name before user object was fetched.", fix: "Add optional chaining: user?.profile?.name or a loading state." },
+      ];
+
+      const getColorClass = (val) => {
+        if (val === 0) return 'bg-slate-800';
+        if (val === 1) return 'bg-rose-900/50';
+        if (val === 2) return 'bg-rose-700/70';
+        return 'bg-rose-500';
+      };
+
+      return (
+        <div className="max-w-7xl mx-auto animate-fade-in pb-10 mt-4">
+          <div className="mb-8 flex justify-between items-end">
+            <div>
+              <h1 className="text-3xl font-bold text-white mb-2">Error Tracker</h1>
+              <p className="text-slate-400">Analyze your mistakes to improve your learning efficiency.</p>
+            </div>
+            <button className="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl transition-colors shadow-sm">
+              Export Log
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+            {/* Heatmap Grid */}
+            <div className="lg:col-span-2 p-6 rounded-2xl bg-slate-900/40 border border-white/10 backdrop-blur-md shadow-[0_8px_32px_0_rgba(31,38,135,0.37)]">
+              <h3 className="font-semibold text-white mb-4">Error Frequency (Last 90 Days)</h3>
+              <div className="flex flex-wrap gap-1.5 h-32 content-start">
+                {heatmapData.map((val, i) => (
+                  <div
+                    key={i}
+                    className={`w-3.5 h-3.5 rounded-sm cursor-pointer hover:ring-2 ring-slate-400 transition-all tooltip ${getColorClass(val)}`}
+                    title={`Day ${90 - i}: ${val * 2} errors`}
+                  ></div>
+                ))}
+              </div>
+              <div className="flex items-center gap-2 mt-4 text-xs text-slate-400">
+                <span>Less</span>
+                <div className="w-3 h-3 bg-slate-800 rounded-sm"></div>
+                <div className="w-3 h-3 bg-rose-900/50 rounded-sm"></div>
+                <div className="w-3 h-3 bg-rose-700/70 rounded-sm"></div>
+                <div className="w-3 h-3 bg-rose-500 rounded-sm"></div>
+                <span>More</span>
+              </div>
+            </div>
+
+            {/* Mistake Breakdown */}
+            <div className="p-6 rounded-2xl bg-slate-900/40 border border-white/10 backdrop-blur-md shadow-[0_8px_32px_0_rgba(31,38,135,0.37)]">
+              <h3 className="font-semibold text-white mb-6">Mistake Breakdown</h3>
+              <div className="space-y-5">
+                {mistakes.map((m, i) => (
+                  <div key={i}>
+                    <div className="flex justify-between text-sm mb-1.5">
+                      <span className="text-slate-300 font-medium">{m.topic}</span>
+                      <span className="text-slate-400">{m.percent}%</span>
+                    </div>
+                    <div className="w-full bg-slate-800 rounded-full h-2">
+                      <div
+                        className={`${m.color} h-2 rounded-full transition-all duration-1000 ease-out shadow-[0_0_10px_currentColor]`}
+                        style={{ width: `${m.percent}%`, color: m.color.replace('bg-', '') }}
+                      ></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Line Graph (UI Only) */}
+            <div className="lg:col-span-2 p-6 rounded-2xl bg-slate-900/40 border border-white/10 backdrop-blur-md shadow-[0_8px_32px_0_rgba(31,38,135,0.37)]">
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="font-semibold text-white">Error Resolution Rate</h3>
+                <span className="px-3 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-lg text-xs font-medium">
+                  +12% vs last week
+                </span>
+              </div>
+              <div className="relative h-48 w-full flex items-end justify-between px-2 pt-4">
+                {/* SVG Line path for decoration */}
+                <svg className="absolute inset-0 h-full w-full" preserveAspectRatio="none">
+                  <path
+                    d="M 0,150 C 100,120 200,160 300,100 C 400,40 500,80 600,20 L 600,200 L 0,200 Z"
+                    fill="url(#gradient)"
+                    opacity="0.2"
+                  />
+                  <path
+                    d="M 0,150 C 100,120 200,160 300,100 C 400,40 500,80 600,20"
+                    fill="none"
+                    stroke="#10b981"
+                    strokeWidth="3"
+                    className="drop-shadow-[0_0_8px_rgba(16,185,129,0.8)]"
+                  />
+                  <defs>
+                    <linearGradient id="gradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#10b981" />
+                      <stop offset="100%" stopColor="transparent" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+                {/* Points */}
+                <div className="absolute left-[16%] bottom-[120px] w-3 h-3 bg-white rounded-full border-2 border-emerald-500 shadow-[0_0_10px_#10b981]"></div>
+                <div className="absolute left-[50%] bottom-[100px] w-3 h-3 bg-white rounded-full border-2 border-emerald-500 shadow-[0_0_10px_#10b981]"></div>
+                <div className="absolute left-[83%] bottom-[50px] w-3 h-3 bg-white rounded-full border-2 border-emerald-500 shadow-[0_0_10px_#10b981]"></div>
+                <div className="absolute right-0 bottom-[20px] w-3 h-3 bg-white rounded-full border-2 border-emerald-500 shadow-[0_0_10px_#10b981] group cursor-pointer">
+                  <div className="absolute -top-10 -left-6 bg-slate-800 text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none border border-slate-700 whitespace-nowrap">
+                    Current: 5 Errors
+                  </div>
+                </div>
+              </div>
+              <div className="flex justify-between text-xs text-slate-500 mt-3 px-2">
+                <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+              </div>
+            </div>
+
+            {/* Suggestion Cards */}
+            <div className="flex flex-col gap-4">
+              <h3 className="font-semibold text-white px-1">AI Suggestions</h3>
+              <div className="p-5 rounded-xl bg-gradient-to-br from-emerald-500/10 to-cyan-500/10 border border-emerald-500/30 hover:border-emerald-500/60 transition-colors cursor-pointer group shadow-[0_4px_20px_rgba(16,185,129,0.1)]">
+                <div className="flex items-center gap-3 mb-2">
+                  <span className="text-2xl group-hover:scale-110 transition-transform">💡</span>
+                  <h4 className="font-medium text-emerald-400">Review SQL Joins</h4>
+                </div>
+                <p className="text-sm text-slate-300">You've made 5 syntax errors in SQL related to OUTER JOINS recently.</p>
+              </div>
+              <div className="p-5 rounded-xl bg-slate-900/40 border border-white/10 hover:bg-slate-800/50 transition-colors cursor-pointer group">
+                <div className="flex items-center gap-3 mb-2">
+                  <span className="text-2xl group-hover:scale-110 transition-transform">🎯</span>
+                  <h4 className="font-medium text-cyan-400">Practice React State</h4>
+                </div>
+                <p className="text-sm text-slate-400">Try building a simple counter app to avoid undefined state errors.</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Expandable Error List */}
+          <div className="mt-6 p-6 rounded-2xl bg-slate-900/40 border border-white/10 backdrop-blur-md shadow-[0_8px_32px_0_rgba(31,38,135,0.37)]">
+            <h3 className="font-semibold text-white mb-6">Recent Errors Log</h3>
+            <div className="space-y-4">
+              {errorList.map(err => {
+                const isExpanded = expandedError === err.id;
+                return (
+                  <div key={err.id} className="border border-slate-700/50 rounded-xl overflow-hidden transition-all duration-300">
+                    <div
+                      onClick={() => setExpandedError(isExpanded ? null : err.id)}
+                      className="p-4 bg-slate-800/40 hover:bg-slate-800/80 cursor-pointer flex justify-between items-center"
+                    >
+                      <div className="flex items-center gap-4">
+                        <span className="text-rose-500 bg-rose-500/10 p-2 rounded-lg text-xl">🐛</span>
+                        <div>
+                          <h4 className="text-slate-200 font-medium">{err.title}</h4>
+                          <div className="flex gap-3 text-xs text-slate-500 mt-1">
+                            <span className="px-2 py-0.5 rounded bg-slate-900/50 border border-slate-700/50">{err.module}</span>
+                            <span className="flex items-center">{err.time}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <span className={`text-slate-500 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}>▼</span>
+                    </div>
+
+                    {isExpanded && (
+                      <div className="p-5 bg-slate-950/50 border-t border-slate-700/50 animate-fade-in text-sm">
+                        <div className="mb-4">
+                          <strong className="text-slate-400 block mb-2 text-xs uppercase tracking-wider">Details:</strong>
+                          <p className="text-slate-300 bg-slate-900 p-4 rounded-xl border border-slate-800 font-mono text-xs shadow-inner">{err.details}</p>
+                        </div>
+                        <div>
+                          <strong className="text-emerald-400 block mb-2 text-xs uppercase tracking-wider flex items-center gap-1"><span>✨</span> AI Suggested Fix:</strong>
+                          <p className="text-emerald-100/90 leading-relaxed">{err.fix}</p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+    // --- From study-planner.html ---
+    const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+    const initialTasks = [
+      { id: 1, day: 'Mon', title: 'Complete DBMS Notes', subject: 'DBMS', duration: '2 hrs', completed: true, color: 'emerald' },
+      { id: 2, day: 'Mon', title: 'SQL Practice Problems', subject: 'DBMS', duration: '1 hr', completed: false, color: 'cyan' },
+      { id: 3, day: 'Tue', title: 'OS Deadlock Chapter', subject: 'OS', duration: '1.5 hrs', completed: false, color: 'rose' },
+      { id: 4, day: 'Wed', title: 'React State Management', subject: 'Frontend', duration: '2 hrs', completed: false, color: 'blue' },
+      { id: 5, day: 'Thu', title: 'Networks OSI Model', subject: 'CN', duration: '1 hr', completed: false, color: 'purple' },
+      { id: 6, day: 'Fri', title: 'Weekly Review', subject: 'General', duration: '30 mins', completed: false, color: 'slate' },
+    ];
+
+    const StudyPlannerUI = ({ setActiveTab }) => {
+      const [tasks, setTasks] = useState(initialTasks);
+      const [isGenerating, setIsGenerating] = useState(false);
+
+      const toggleTask = (id) => {
+        setTasks(tasks.map(t => t.id === id ? { ...t, completed: !t.completed } : t));
+      };
+
+      const handleGenerate = () => {
+        setIsGenerating(true);
+        setTimeout(() => setIsGenerating(false), 1500);
+      };
+
+      const completedCount = tasks.filter(t => t.completed).length;
+      const progressPercent = Math.round((completedCount / tasks.length) * 100) || 0;
+
+      const streak = 14;
+
+      const colorMap = {
+        emerald: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
+        cyan: 'bg-cyan-500/20 text-cyan-400 border-cyan-500/30',
+        rose: 'bg-rose-500/20 text-rose-400 border-rose-500/30',
+        blue: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
+        purple: 'bg-purple-500/20 text-purple-400 border-purple-500/30',
+        slate: 'bg-slate-700/50 text-slate-300 border-slate-600/50',
+      };
+
+      return (
+        <div className="max-w-7xl mx-auto animate-fade-in pb-10 mt-4">
+
+          <button onClick={() => setActiveTab('Dashboard')} className="mb-6 flex items-center text-slate-400 hover:text-white transition-colors group">
+            <span className="mr-2 transform group-hover:-translate-x-1 transition-transform">←</span>
+            Back to Dashboard
+          </button>
+
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4">
+            <div>
+              <h1 className="text-3xl font-bold text-white mb-2">Study Planner</h1>
+              <p className="text-slate-400">Organize your tasks and track your weekly learning goals.</p>
+            </div>
+            <button
+              onClick={handleGenerate}
+              className="px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-semibold shadow-[0_0_15px_rgba(16,185,129,0.3)] hover:shadow-[0_0_25px_rgba(16,185,129,0.6)] transition-all transform hover:scale-105 active:scale-95 flex items-center gap-2"
+            >
+              {isGenerating ? (
+                <span className="flex items-center gap-2"><div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div> Generating...</span>
+              ) : (
+                <span className="flex items-center gap-2 text-lg">✨ <span className="text-base">Generate AI Plan</span></span>
+              )}
+            </button>
+          </div>
+
+          {/* Top Stats */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+
+            <div className="col-span-2 p-7 rounded-2xl bg-slate-900/40 border border-white/10 backdrop-blur-md shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] flex flex-col justify-center">
+              <div className="flex justify-between items-end mb-4">
+                <div>
+                  <h3 className="font-semibold text-white mb-1 text-lg">Weekly Progress</h3>
+                  <p className="text-sm text-slate-400">{completedCount} of {tasks.length} tasks completed</p>
+                </div>
+                <div className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400 drop-shadow-[0_0_8px_rgba(16,185,129,0.3)]">
+                  {progressPercent}%
+                </div>
+              </div>
+              <div className="w-full h-4 bg-slate-950/50 rounded-full overflow-hidden border border-slate-700/50 shadow-inner">
+                <div
+                  className="h-full bg-gradient-to-r from-emerald-500 to-cyan-500 transition-all duration-1000 ease-out shadow-[0_0_10px_rgba(16,185,129,0.5)]"
+                  style={{ width: `${progressPercent}%` }}
+                ></div>
+              </div>
+            </div>
+
+            <div className="p-7 rounded-2xl bg-slate-900/40 border border-white/10 backdrop-blur-md shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] flex items-center gap-6 relative overflow-hidden group">
+              <div className="absolute -right-4 -top-4 w-24 h-24 bg-orange-500/20 rounded-full blur-2xl group-hover:bg-orange-500/30 transition-colors"></div>
+              <div className="text-6xl drop-shadow-[0_0_15px_rgba(251,146,60,0.6)] animate-[bounce_2s_infinite]">🔥</div>
+              <div className="z-10">
+                <h3 className="text-4xl font-bold text-white mb-1">{streak} <span className="text-lg text-slate-400 font-medium">Days</span></h3>
+                <p className="text-orange-400 text-sm font-medium tracking-wide">Study Streak!</p>
+              </div>
+            </div>
+
+          </div>
+
+          {/* Weekly Calendar Layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-7 gap-5">
+            {daysOfWeek.map((day, index) => {
+              const dayTasks = tasks.filter(t => t.day === day);
+              const isToday = day === 'Mon';
+
+              return (
+                <div key={day} className="flex flex-col gap-4">
+                  <div className={`py-3 text-center rounded-xl font-semibold border transition-all ${isToday ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500 shadow-[0_0_15px_rgba(6,182,212,0.3)]' : 'bg-slate-900/40 border-white/10 text-slate-300'}`}>
+                    {day}
+                  </div>
+
+                  <div className="flex-1 flex flex-col gap-3">
+                    {dayTasks.map((task) => (
+                      <div
+                        key={task.id}
+                        className={`p-4 rounded-xl border bg-slate-900/60 backdrop-blur-sm transition-all duration-300 group hover:-translate-y-1 hover:shadow-lg hover:border-slate-500 ${task.completed ? 'opacity-60 border-emerald-500/30 bg-slate-950/80' : 'border-slate-700/50'}`}
+                      >
+                        <div className="flex items-start justify-between gap-2 mb-3">
+                          <span className={`px-2.5 py-1 rounded-md text-xs font-semibold border ${colorMap[task.color]}`}>
+                            {task.subject}
+                          </span>
+                          <input
+                            type="checkbox"
+                            className="checkbox-custom mt-0.5"
+                            checked={task.completed}
+                            onChange={() => toggleTask(task.id)}
+                          />
+                        </div>
+                        <h4 className={`font-medium mb-3 text-sm leading-snug ${task.completed ? 'text-slate-500 line-through' : 'text-slate-200'}`}>
+                          {task.title}
+                        </h4>
+                        <div className="flex items-center text-xs text-slate-400">
+                          <span className="flex items-center gap-1.5"><span className="opacity-70">⏱️</span> {task.duration}</span>
+                        </div>
+                      </div>
+                    ))}
+
+                    {dayTasks.length === 0 && (
+                      <div className="h-28 rounded-xl border border-dashed border-slate-700/70 flex items-center justify-center text-slate-600 text-sm bg-slate-900/20">
+                        No tasks
+                      </div>
+                    )}
+
+                    <button className="py-2.5 mt-auto rounded-xl border border-dashed border-slate-700/70 text-slate-500 hover:text-slate-300 hover:border-slate-500 hover:bg-slate-800/50 transition-colors text-sm font-medium">
+                      + Add Task
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+        </div>
+      );
+    };
+
+    // --- From leaderboard.html ---
+    const LeaderboardUI = ({ setActiveTab }) => {
+
+      const topPlayers = [
+        { rank: 2, name: "AlexChen", score: 12450, avatar: "AC", color: "from-slate-300 to-slate-500", border: "border-slate-300", height: "h-36", delay: "animation-delay-100" },
+        { rank: 1, name: "SarahConnor", score: 14200, avatar: "SC", color: "from-yellow-300 to-yellow-600", border: "border-yellow-400", height: "h-48", delay: "animation-delay-0" },
+        { rank: 3, name: "NeoMatrix", score: 11800, avatar: "NM", color: "from-orange-400 to-amber-700", border: "border-amber-500", height: "h-28", delay: "animation-delay-200" },
+      ];
+
+      const competitors = [
+        { rank: 40, name: "DataNinja", score: 8450 },
+        { rank: 41, name: "CodeWizard", score: 8320 },
+        { rank: 42, name: "You (JohnDoe)", score: 8150, isMe: true },
+        { rank: 43, name: "ByteMe", score: 8100 },
+        { rank: 44, name: "NullPointer", score: 7950 },
+      ];
+
+      const fullTable = [
+        { rank: 4, name: "DevMaster", score: 10500, badges: ["🏆", "🔥"] },
+        { rank: 5, name: "TechGuru", score: 10200, badges: ["⭐"] },
+        { rank: 6, name: "CodeNinja", score: 9800, badges: [] },
+        { rank: 7, name: "BugHunter", score: 9500, badges: ["🐛", "🔥"] },
+      ];
+
+      const achievements = [
+        { icon: "🔥", title: "7-Day Streak", desc: "Studied 7 days in a row", achieved: true },
+        { icon: "🏆", title: "Test Ace", desc: "Score 100% on any test", achieved: true },
+        { icon: "⚡", title: "Speed Demon", desc: "Complete module under 10 mins", achieved: false },
+        { icon: "🧠", title: "Big Brain", desc: "Answer 50 questions correctly", achieved: false },
+      ];
+
+      return (
+        <div className="max-w-7xl mx-auto animate-fade-in pb-10 mt-4">
+
+          <div className="text-center mb-16">
+            <h1 className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-emerald-400 mb-4 drop-shadow-[0_0_15px_rgba(6,182,212,0.5)] tracking-tight">
+              Global Leaderboard
+            </h1>
+            <p className="text-slate-400 font-medium text-lg">Climb the ranks, compete with peers, and earn exclusive badges.</p>
+          </div>
+
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+
+            {/* Left Col: Podium & Top Players */}
+            <div className="xl:col-span-2 space-y-8">
+
+              {/* Podium Section */}
+              <div className="p-8 rounded-3xl bg-slate-900/60 border border-white/10 backdrop-blur-md shadow-[0_8px_32px_0_rgba(31,38,135,0.37)]">
+                <div className="flex justify-center items-end h-80 gap-3 md:gap-8 mt-12">
+                  {topPlayers.map((player) => (
+                    <div key={player.rank} className="flex flex-col items-center group relative">
+                      {/* Avatar & Info */}
+                      <div className="absolute -top-20 flex flex-col items-center">
+                        {player.rank === 1 && <span className="text-4xl mb-2 drop-shadow-[0_0_15px_rgba(250,204,21,0.8)] animate-bounce">👑</span>}
+                        <div className={`w-16 h-16 rounded-full bg-gradient-to-br ${player.color} flex items-center justify-center text-white text-xl font-bold border-4 ${player.border} shadow-[0_0_20px_rgba(0,0,0,0.5)] z-10 group-hover:-translate-y-3 transition-transform duration-300`}>
+                          {player.avatar}
+                        </div>
+                        <span className="text-white font-bold text-sm mt-3 whitespace-nowrap bg-slate-900/80 px-3 py-1 rounded-full border border-slate-700 shadow-md">{player.name}</span>
+                        <span className="text-emerald-400 text-xs font-mono font-bold mt-1 drop-shadow-md">{player.score.toLocaleString()} pts</span>
+                      </div>
+
+                      {/* Podium Pillar */}
+                      <div className={`w-24 md:w-32 rounded-t-xl bg-gradient-to-b from-slate-800 to-slate-900 border-t-4 flex items-start justify-center pt-6 relative overflow-hidden transition-all duration-500 hover:brightness-125 ${player.rank === 1 ? 'podium-1' : player.rank === 2 ? 'podium-2' : 'podium-3'} ${player.height}`}>
+                        <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent"></div>
+                        <span className={`text-6xl font-black opacity-30 drop-shadow-lg ${player.rank === 1 ? 'text-yellow-400' : player.rank === 2 ? 'text-slate-300' : 'text-amber-600'}`}>
+                          {player.rank}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Leaderboard Table (Ranks 4-5 + others) */}
+              <div className="p-6 rounded-3xl bg-slate-900/40 border border-white/10 backdrop-blur-md shadow-[0_8px_32px_0_rgba(31,38,135,0.37)]">
+                <h3 className="font-bold text-white mb-6 px-2 text-xl flex items-center gap-2"><span>⚔️</span> Top Challengers</h3>
+                <div className="space-y-3">
+                  {fullTable.map(p => (
+                    <div key={p.rank} className="flex items-center justify-between p-4 rounded-xl bg-slate-800/50 hover:bg-slate-700/50 border border-slate-700/50 transition-colors shadow-sm">
+                      <div className="flex items-center gap-5">
+                        <span className="w-8 text-center font-bold text-slate-400 text-lg">#{p.rank}</span>
+                        <div className="w-12 h-12 rounded-full bg-slate-700 border border-slate-600 flex items-center justify-center text-sm font-bold text-white shadow-inner">
+                          {p.name.substring(0, 2).toUpperCase()}
+                        </div>
+                        <span className="font-semibold text-white text-lg">{p.name}</span>
+                        <div className="flex gap-1 ml-2">
+                          {p.badges.map((b, i) => <span key={i} className="text-xl drop-shadow-sm">{b}</span>)}
+                        </div>
+                      </div>
+                      <span className="font-mono text-cyan-400 font-semibold tracking-wide">{p.score.toLocaleString()} pts</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+            </div>
+
+            {/* Right Col: Personal Stats & Competitors */}
+            <div className="space-y-8">
+
+              {/* Your Rank Card */}
+              <div className="p-7 rounded-3xl bg-gradient-to-br from-slate-900 to-slate-800 border border-cyan-500/40 shadow-[0_0_25px_rgba(6,182,212,0.2)] relative overflow-hidden">
+                <div className="absolute -right-10 -top-10 w-48 h-48 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                <div className="absolute -left-10 -bottom-10 w-48 h-48 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+                <h3 className="text-cyan-400 font-bold uppercase tracking-widest text-sm mb-6 flex justify-between">
+                  <span>Your Profile</span>
+                  <span className="text-slate-500">Global Region</span>
+                </h3>
+
+                <div className="flex items-center gap-5 mb-8">
+                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center text-3xl font-black text-white shadow-[0_0_20px_rgba(6,182,212,0.5)] border-4 border-slate-900 ring-2 ring-cyan-500/50">
+                    JD
+                  </div>
+                  <div>
+                    <h2 className="text-3xl font-bold text-white tracking-tight">JohnDoe</h2>
+                    <p className="text-slate-300 font-medium mt-1 bg-slate-950/50 px-3 py-1 rounded-lg border border-slate-700 inline-block">
+                      Rank <span className="text-cyan-400 font-bold text-lg mx-1">#42</span> • <span className="font-mono">{Number(8150).toLocaleString()} pts</span>
+                    </p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4 mb-8">
+                  <div className="bg-slate-950/60 p-4 rounded-xl border border-slate-700/50 text-center shadow-inner relative overflow-hidden">
+                    <div className="absolute inset-x-0 bottom-0 h-1 bg-orange-500"></div>
+                    <span className="text-3xl mb-2 block drop-shadow-[0_0_10px_rgba(249,115,22,0.6)]">🔥</span>
+                    <span className="text-white font-bold text-xl">14 Days</span>
+                    <span className="text-slate-500 text-xs block uppercase tracking-wider font-semibold mt-1">Active Streak</span>
+                  </div>
+                  <div className="bg-slate-950/60 p-4 rounded-xl border border-slate-700/50 text-center shadow-inner relative overflow-hidden">
+                    <div className="absolute inset-x-0 bottom-0 h-1 bg-blue-500"></div>
+                    <span className="text-3xl mb-2 block drop-shadow-[0_0_10px_rgba(59,130,246,0.6)]">📚</span>
+                    <span className="text-white font-bold text-xl">24</span>
+                    <span className="text-slate-500 text-xs block uppercase tracking-wider font-semibold mt-1">Modules Done</span>
+                  </div>
+                </div>
+
+                {/* Race to Next Rank */}
+                <div className="bg-slate-800/40 p-4 rounded-xl border border-slate-700/50">
+                  <div className="flex justify-between text-sm mb-3 font-semibold">
+                    <span className="text-slate-200">Race to Rank #41</span>
+                    <span className="text-cyan-400 animate-pulse">170 pts to go</span>
+                  </div>
+                  <div className="h-4 w-full bg-slate-950 rounded-full overflow-hidden border border-slate-700 shadow-inner">
+                    <div className="h-full bg-gradient-to-r from-emerald-400 to-cyan-500 shadow-[0_0_15px_rgba(6,182,212,0.8)] relative" style={{ width: '75%' }}>
+                      <div className="absolute inset-0 bg-white/30 w-full animate-[shimmer_2s_infinite]"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Close Competitors */}
+              <div className="p-6 rounded-3xl bg-slate-900/40 border border-white/10 backdrop-blur-md shadow-[0_8px_32px_0_rgba(31,38,135,0.37)]">
+                <h3 className="font-bold text-white mb-5 text-lg flex items-center gap-2"><span>🎯</span> Rivals in Reach</h3>
+                <div className="space-y-2.5">
+                  {competitors.map(c => (
+                    <div key={c.rank} className={`flex items-center justify-between p-3.5 rounded-xl border transition-all duration-300 ${c.isMe ? 'bg-gradient-to-r from-cyan-500/20 to-blue-500/10 border-cyan-500/50 shadow-[0_0_15px_rgba(6,182,212,0.2)] transform scale-[1.02]' : 'bg-slate-800/40 border-transparent hover:border-slate-600 hover:bg-slate-800'}`}>
+                      <div className="flex items-center gap-4">
+                        <span className={`w-8 font-bold ${c.isMe ? 'text-cyan-400 text-lg' : 'text-slate-500'}`}>#{c.rank}</span>
+                        <span className={`font-semibold ${c.isMe ? 'text-white' : 'text-slate-300'}`}>{c.name}</span>
+                      </div>
+                      <span className={`font-mono text-sm font-medium ${c.isMe ? 'text-cyan-300' : 'text-slate-400'}`}>{c.score.toLocaleString()}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Achievement Badges */}
+              <div className="p-6 rounded-3xl bg-slate-900/40 border border-white/10 backdrop-blur-md shadow-[0_8px_32px_0_rgba(31,38,135,0.37)]">
+                <h3 className="font-bold text-white mb-5 text-lg flex items-center gap-2"><span>🎖️</span> Badges</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  {achievements.map((ach, i) => (
+                    <div key={i} className={`p-4 rounded-xl border flex flex-col items-center text-center transition-all ${ach.achieved ? 'bg-gradient-to-b from-slate-800 to-slate-900 border-yellow-500/40 shadow-[0_4px_20px_rgba(250,204,21,0.1)] hover:-translate-y-1' : 'bg-slate-900/80 border-slate-800 opacity-60 grayscale'}`}>
+                      <span className={`text-4xl mb-3 ${ach.achieved ? 'drop-shadow-[0_0_15px_rgba(250,204,21,0.6)]' : ''}`}>{ach.icon}</span>
+                      <span className={`font-bold text-sm mb-1 ${ach.achieved ? 'text-yellow-400' : 'text-slate-400'}`}>{ach.title}</span>
+                      <span className="text-[11px] text-slate-500 leading-snug font-medium">{ach.desc}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      );
+    };
+
+    // Add shimmer animation
+    const style = document.createElement('style');
+    style.innerHTML = `
+      @keyframes shimmer {
+        0% { transform: translateX(-100%) skewX(-15deg); }
+        100% { transform: translateX(200%) skewX(-15deg); }
+      }
+    `;
+    document.head.appendChild(style);
+
+
+    const App = () => {
+      const [activeTab, setActiveTab] = useState('Dashboard');
+
+      const tabs = [
+        { name: 'Dashboard', icon: '📊' },
+        { name: 'Notes', icon: '📚' },
+        { name: 'AI Learning', icon: '🤖' },
+        { name: 'Test', icon: '📝' },
+        { name: 'Error Tracker', icon: '🎯' },
+        { name: 'Study Planner', icon: '📅' },
+        { name: 'Leaderboard', icon: '🏆' }
+      ];
+
+      const renderPage = () => {
+        switch (activeTab) {
+          case "Dashboard": return <DashboardUI setActiveTab={setActiveTab} />;
+          case "Notes": return <NotesUI setActiveTab={setActiveTab} />;
+          case "AI Learning": return <ChatUI setActiveTab={setActiveTab} />;
+          case "Test": return <TestUI setActiveTab={setActiveTab} />;
+          case "Error Tracker": return <ErrorTrackerUI setActiveTab={setActiveTab} />;
+          case "Study Planner": return <StudyPlannerUI setActiveTab={setActiveTab} />;
+          case "Leaderboard": return <LeaderboardUI setActiveTab={setActiveTab} />;
+          default: return <DashboardUI setActiveTab={setActiveTab} />;
+        }
+      };
+
+      return (
+        <div className="flex h-screen bg-slate-900 font-sans overflow-hidden">
+          {/* Sidebar */}
+          <div className="w-64 bg-slate-800/40 backdrop-blur-md border-r border-slate-700/50 flex flex-col z-20">
+            <div className="p-6 border-b border-slate-700/50">
+              <h1 className="text-2xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400 drop-shadow-sm">
+                VTU Learn
+              </h1>
+              <p className="text-xs text-slate-400 mt-1">AI Powered Platform</p>
+            </div>
+
+            <nav className="flex-1 overflow-y-auto py-6">
+              <ul className="space-y-1.5 px-4">
+                {tabs.map(tab => (
+                  <li key={tab.name}>
+                    <button
+                      onClick={() => setActiveTab(tab.name)}
+                      className={`w-full flex items-center text-left px-4 py-3 rounded-xl transition-all duration-300 font-medium ${tab.name === activeTab
+                          ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shadow-[0_0_15px_rgba(16,185,129,0.1)]'
+                          : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200 hover:scale-[1.02]'
+                        }`}
+                    >
+                      <span className="mr-3 text-lg">{tab.icon}</span>
+                      {tab.name}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+
+            <div className="p-4 border-t border-slate-700/50">
+              <div className="bg-gradient-to-r from-purple-500/10 to-cyan-500/10 border border-purple-500/20 rounded-xl p-4 text-center">
+                <p className="text-xs text-purple-300 font-semibold mb-2">Pro Plan Active</p>
+                <div className="w-full bg-slate-900 rounded-full h-1.5 mb-1">
+                  <div className="bg-gradient-to-r from-purple-400 to-cyan-400 h-1.5 rounded-full" style={{ width: '70%' }}></div>
+                </div>
+                <p className="text-[10px] text-slate-400">70% to Level 42</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Main Content Area */}
+          <div className="flex-1 flex flex-col h-screen overflow-hidden relative">
+            <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-emerald-500/10 rounded-full blur-[120px] pointer-events-none"></div>
+            <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-500/10 rounded-full blur-[120px] pointer-events-none"></div>
+
+            {/* Navbar */}
+            <header className="h-20 bg-slate-900/50 backdrop-blur-md border-b border-slate-700/50 flex items-center justify-between px-8 z-10 sticky top-0">
+              <div className="flex-1 max-w-xl">
+                <div className="relative group">
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-cyan-400 transition-colors">🔍</span>
+                  <input
+                    type="text"
+                    placeholder="Search for subjects, topics, or modules..."
+                    className="w-full bg-slate-800/50 border border-slate-700 rounded-2xl py-2.5 pl-12 pr-6 text-sm text-white placeholder-slate-400 focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 focus:bg-slate-800 transition-all duration-300"
+                  />
+                </div>
+              </div>
+              <div className="flex items-center space-x-6 ml-4">
+                <button className="relative p-2 text-slate-400 hover:text-white transition-colors rounded-full hover:bg-slate-800">
+                  <span className="text-xl">🔔</span>
+                  <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-rose-500 border-2 border-slate-900 rounded-full"></span>
+                </button>
+                <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-cyan-400 to-purple-500 p-[2px] shadow-lg shadow-purple-500/20 cursor-pointer hover:scale-105 transition-transform">
+                  <div className="w-full h-full bg-slate-900 rounded-full flex items-center justify-center text-sm font-bold text-white border border-slate-800/50">
+                    JD
+                  </div>
+                </div>
+              </div>
+            </header>
+
+            {/* Dynamic Content */}
+            <main className="flex-1 overflow-y-auto p-8 z-10">
+              {renderPage()}
+            </main>
+          </div>
+
+        </div>
+      );
+    };
+
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+
+</html>
